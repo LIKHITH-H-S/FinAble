@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import UPI from "./pages/upi.js";
+
 // Pages
 import Login from "./pages/login.js";
 import Signup from "./pages/signup.js";
@@ -21,15 +22,20 @@ function ProtectedRoute({ children }) {
 function App() {
   return (
     <>
-      <Navbar />
       <Routes>
+        {/* Public routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+
+        {/* Protected routes */}
         <Route
           path="/"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <>
+                <Navbar />
+                <Dashboard />
+              </>
             </ProtectedRoute>
           }
         />
@@ -37,7 +43,10 @@ function App() {
           path="/addmoney"
           element={
             <ProtectedRoute>
-              <AddMoney />
+              <>
+                <Navbar />
+                <AddMoney />
+              </>
             </ProtectedRoute>
           }
         />
@@ -45,7 +54,10 @@ function App() {
           path="/transfer"
           element={
             <ProtectedRoute>
-              <Transfer />
+              <>
+                <Navbar />
+                <Transfer />
+              </>
             </ProtectedRoute>
           }
         />
@@ -53,19 +65,28 @@ function App() {
           path="/bill"
           element={
             <ProtectedRoute>
-              <Bill />
+              <>
+                <Navbar />
+                <Bill />
+              </>
             </ProtectedRoute>
           }
         />
-      <Route
+        <Route
           path="/upi"
           element={
             <ProtectedRoute>
-              <UPI />
+              <>
+                <Navbar />
+                <UPI />
+              </>
             </ProtectedRoute>
           }
         />
-</Routes>
+
+        {/* Default route: redirect unknown paths */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </>
   );
 }

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Container, Typography, Stack, Card, CardContent, Button } from "@mui/material";
 import API from "../api/axios.js";
-import { Card, CardContent, Typography, Button, Stack } from "@mui/material";
-import BillCard from "../components/billcard.js";
 import VoiceControl from "../components/VoiceControl.js";
 import OCRReader from "../components/OCRReader.js";
 
 function Bill() {
   const [bills, setBills] = useState([]);
+  const [message, setMessage] = useState("");
 
   const fetchBills = async () => {
     try {
@@ -20,10 +20,10 @@ function Bill() {
   const handlePay = async (id) => {
     try {
       const { data } = await API.post(`/bills/pay/${id}`);
-      alert(data.message);
+      setMessage(data.message);
       fetchBills();
     } catch (err) {
-      alert(err.response?.data?.message || "Error paying bill");
+      setMessage(err.response?.data?.message || "Error paying bill");
     }
   };
 
@@ -36,14 +36,12 @@ function Bill() {
     window.speechSynthesis.speak(utterance);
   };
 
-useEffect(() => {
+  useEffect(() => {
     fetchBills();
   }, []);
 
-  
-
- return (
-    <div style={{ maxWidth: 600, margin: "20px auto" }}>
+  return (
+    <Container sx={{ mt: 5, maxWidth: 600 }}>
       <Typography variant="h4" gutterBottom>
         Bills
       </Typography>
@@ -51,7 +49,13 @@ useEffect(() => {
       {/* OCR Reader */}
       <OCRReader />
 
-      <Stack spacing={2} marginTop={2}>
+      {message && (
+        <Typography sx={{ mt: 2, mb: 2 }} color="green">
+          {message}
+        </Typography>
+      )}
+
+      <Stack spacing={2} sx={{ mt: 2 }}>
         {bills.map((bill, index) => (
           <Card key={bill._id}>
             <CardContent>
@@ -62,8 +66,8 @@ useEffect(() => {
                 <Button
                   variant="contained"
                   color="primary"
+                  sx={{ mt: 1 }}
                   onClick={() => handlePay(bill._id)}
-                  style={{ marginTop: 10 }}
                 >
                   Pay
                 </Button>
@@ -82,7 +86,7 @@ useEffect(() => {
           readBills: handleReadBills,
         }}
       />
-    </div>
+    </Container>
   );
 }
 

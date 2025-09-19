@@ -1,15 +1,36 @@
-/* src/index.css */
-
+/* Global Styles */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
+  transition: background-color 0.3s, color 0.3s, font-size 0.3s;
 }
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 button {
   cursor: pointer;
+}
+
+/* Accessibility Styles */
+body.high-contrast {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+body.large-text {
+  font-size: 1.25rem !important; /* Increase all text size */
+}
+
+/* Optional: high-contrast button and link overrides */
+body.high-contrast button,
+body.high-contrast input,
+body.high-contrast select,
+body.high-contrast textarea {
+  background-color: #222 !important;
+  color: #fff !important;
+  border-color: #fff !important;
 }

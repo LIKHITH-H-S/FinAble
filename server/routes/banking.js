@@ -74,5 +74,21 @@ router.post("/transfer", authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// ✅ Transaction History
+router.get("/transactions", authMiddleware, async (req, res) => {
+  try {
+    const transactions = await Transaction.find({
+      $or: [{ sender: req.user.id }, { receiver: req.user.id }]
+    })
+    .populate("sender", "name email")
+    .populate("receiver", "name email")
+    .sort({ createdAt: -1 });
+
+    res.json(transactions);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;
